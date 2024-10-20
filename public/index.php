@@ -1,5 +1,4 @@
 <?php
-
 /*
  *---------------------------------------------------------------
  * CHECK PHP VERSION
@@ -21,10 +20,10 @@ if (version_compare(PHP_VERSION, $minPhpVersion, '<')) {
 }
 
 /*
- *---------------------------------------------------------------
- * SET THE CURRENT DIRECTORY
- *---------------------------------------------------------------
- */
+  *---------------------------------------------------------------
+  * SET THE CURRENT DIRECTORY
+  *---------------------------------------------------------------
+  */
 
 // Path to the front controller (this file)
 define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR);
@@ -35,13 +34,22 @@ if (getcwd() . DIRECTORY_SEPARATOR !== FCPATH) {
 }
 
 /*
- *---------------------------------------------------------------
- * BOOTSTRAP THE APPLICATION
- *---------------------------------------------------------------
- * This process sets up the path constants, loads and registers
- * our autoloader, along with Composer's, loads our constants
- * and fires up an environment-specific bootstrapping.
- */
+  *---------------------------------------------------------------
+  * ADD SECURITY AND CACHE HEADERS
+  *---------------------------------------------------------------
+  */
+header('X-Content-Type-Options: nosniff');
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache'); // Para mayor compatibilidad
+
+/*
+  *---------------------------------------------------------------
+  * BOOTSTRAP THE APPLICATION
+  *---------------------------------------------------------------
+  * This process sets up the path constants, loads and registers
+  * our autoloader, along with Composer's, loads our constants
+  * and fires up an environment-specific bootstrapping.
+  */
 
 // LOAD OUR PATHS CONFIG FILE
 // This is the line that might need to be changed, depending on your folder structure.

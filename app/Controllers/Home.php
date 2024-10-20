@@ -6,6 +6,8 @@ class Home extends BaseController
 {
     public function index(): string
     {
-        return view('welcome_message');
+        helper('util_helper');
+        $data['token'] = generateToken();
+        return view('welcome_message', $data);
     }
 }

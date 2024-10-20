@@ -2,27 +2,55 @@
 
 namespace App\Controllers;
 
+use App\Models\ProductsModel;
+use CodeIgniter\Exceptions\PageNotFoundException;
+
 class Products extends BaseController
 {
+    private $productModel;
+    public function __construct()
+    {
+        $this->productModel = new ProductsModel();
+        helper('form');
+    }
 
     public function index()
     {
-        echo '<h1>Products</h1>';
-        //echo sesi
-        //print this session json
-        print_r($this->session);
+        $productsModels = new ProductsModel();
+
+        $db = db_connect();
+
+        $products = $db->table('products')
+            ->select('products.id, products.code, products.name, products.stock, warehouse.name AS warehouse, products.status')
+            ->join('warehouse', 'products.id_warehouse = warehouse.id')
+            ->get()
+            ->getResultArray();
+
+        return view('products/index', ['products' => $products]);
     }
 
-    //show
     public function showID($productId)
     {
-        // echo '<h2>Product ID: ' . $productId . '</h2>';
-        return view('show_id');
+        $productsModels = new ProductsModel();
+        $product = $productsModels->find($productId);
+
+        if (!$product) {
+            throw PageNotFoundException::forPageNotFound('El producto no existe');
+        }
+
+        $data = ["title" => "Producto " . $product['name'], "product" => $product];
+
+        return view('products/show_id', $data);
     }
+
+    public function create()
+    {
+        helper('form');
+        return view('products/create');
+    }
+
     public function showProd($nameProd, $productId)
     {
-        // echo '<h1>Producto: ' . $nameProd . '</h1>';
-        // echo '<h2>ID Producto: ' . $productId . '</h2>';
         return view('products/show_prod');
     }
 }
